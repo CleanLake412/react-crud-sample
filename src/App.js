@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 //import logo from './logo.svg';
 import Customer from './components/Customer'
 import './App.css';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 
 const customers = [
     {
@@ -34,16 +39,23 @@ class App extends Component {
     render() {
         return (
             <div>
-                {customers.map(customer => {
-                    return <Customer
-                        id={customer.id}
-                        image={customer.image}
-                        name={customer.name}
-                        birthday={customer.birthday}
-                        gender={customer.gender}
-                        job={customer.job}
-                    />
-                })}
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>ID</TableCell>
+                            <TableCell>写真</TableCell>
+                            <TableCell>名前</TableCell>
+                            <TableCell>生年月日</TableCell>
+                            <TableCell>性別</TableCell>
+                            <TableCell>職業</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {customers.map(c => {
+                            return <Customer key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} />
+                        })}
+                    </TableBody>
+                </Table>
             </div>
         );
     }
