@@ -83,11 +83,13 @@ class App extends Component {
                             <TableCell>生年月日</TableCell>
                             <TableCell>性別</TableCell>
                             <TableCell>職業</TableCell>
+                            <TableCell>変更日時</TableCell>
+                            <TableCell>操作</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {this.state.customers ? this.state.customers.map(c => {
-                            return <Customer key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} />
+                            return <Customer stateRefresh={this.stateRefresh} key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} updated_at={c.updated_at} />
                         }) :
                         <TableRow>
                             <TableCell colSpan="6" align="center">
