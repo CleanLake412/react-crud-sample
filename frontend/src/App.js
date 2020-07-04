@@ -103,19 +103,28 @@ class App extends Component {
         super(props);
         this.state = {
             customers: [],
-            completed: 0
+            completed: 0,
+            searchKeyword: ''
         }
         this.stateRefresh = this.stateRefresh.bind(this);
+        this.handleValueChange = this.handleValueChange.bind(this);
     }
 
     stateRefresh() {
         this.setState({
             customers: [],
-            completed: 0
+            completed: 0,
+            searchKeyword: ''
         });
         this.callApi()
             .then(res => this.setState({customers: res}))
             .catch(err => console.log(err));
+    }
+
+    handleValueChange(e) {
+        let nextState = {};
+        nextState[e.target.name] = e.target.value;
+        this.setState(nextState);
     }
 
     componentDidMount() {
@@ -141,6 +150,14 @@ class App extends Component {
     };
 
     render() {
+        const filteredComponents = (data) => {
+            data = data.filter((c) => {
+                return c.name.indexOf(this.state.searchKeyword) > -1;
+            });
+            return data.map((c) => {
+                return <Customer stateRefresh={this.stateRefresh} key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} updated_at={c.updated_at} />
+            });
+        }
         const { classes } = this.props;
         const cellList = ["ID", "写真", "お名前", "生年月日", "性別", "職業", "変更日時", "操作"]
         return (
@@ -164,6 +181,9 @@ class App extends Component {
                                     root: classes.inputRoot,
                                     input: classes.inputInput,
                                 }}
+                                name="searchKeyword"
+                                value={this.state.searchKeyword}
+                                onChange={this.handleValueChange}
                             />
                         </div>
                     </Toolbar>
@@ -181,9 +201,7 @@ class App extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.customers ? this.state.customers.map(c => {
-                                return <Customer stateRefresh={this.stateRefresh} key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} updated_at={c.updated_at} />
-                            }) :
+                            {this.state.customers ? filteredComponents(this.state.customers) :
                             <TableRow>
                                 <TableCell colSpan="8" align="center">
                                     <CircularProgress className={classes.progress} variant="determinate" value={this.state.completed} />
